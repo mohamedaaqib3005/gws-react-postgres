@@ -1,21 +1,14 @@
-import React, { Suspense, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
-// Dynamically import components
-const Home = lazy(() => import("./pages/Home"));
-const Specialities = lazy(() => import("./pages/Specialities"));
+function Counter (){
+  const [count,setCount]=useState(0);
 
-function App() {
   return (
-    <Router>
-      <Suspense fallback={<div>Loading page...</div>}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/specialities" element={<Specialities />} />
-        </Routes>
-      </Suspense>
-    </Router>
+   <div>
+    <p>current count:{count}</p>
+    <button onClick={()=>setCount(count+1)}>
+      + INcrease
+    </button>
+   </div>
   );
 }
-
-export default App;
