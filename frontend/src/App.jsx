@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DoctorList from "./pages/doctors-list";
+// import DoctorList from "./pages/doctors-list";
 
 // Dynamically import components
 const Home = lazy(() => import("./pages/Home"));

@@ -11,4 +11,6 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+console.log('>'.repeat(90),Object.entries(process.env).filter(([key]) => key.startsWith('DB')))
+
 export default pool;
