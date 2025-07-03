@@ -1,5 +1,5 @@
                                                                                                                                                                       // src/pages/Home.jsx
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../styles/home.css";
 
 function Home() {

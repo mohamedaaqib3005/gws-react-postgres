@@ -1,23 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import DoctorCard from "../components/DoctorCard";
 import "../styles/doctors-list.css";
-import DoctorCard from "./DoctorCard";
+import { fetchDoctorsBySpeciality } from "../api/doctorApi";
 
 function DoctorList() {
-    const doctorData = [
-        { id: "DR001", image: "../assets/pexels-konrads-photo-32205061.jpg" },
-        { id: "DR002", image: "../assets/pexels-karolina-grabowska-5206931.jpg" },
-        { id: "DR003", image: "../assets/pexels-konrads-photo-32254662.jpg" },
-        { id: "DR004", image: "../assets/pexels-pavel-danilyuk-5998474.jpg" },
-        { id: "DR005", image: "../assets/pexels-shkrabaanthony-6749777.jpg" },
-    ];
-}
+  const [doctorData, setDoctorData] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const speciality = searchParams.get("speciality");
 
-return (
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      const startTime = new Date("2024-01-01").toISOString();
+      const endTime = new Date("2026-01-01").toISOString();
+
+      try {
+        const data = await fetchDoctorsBySpeciality(
+          speciality,
+          startTime,
+          endTime
+        );
+
+        if (!data || data.length === 0) {
+          setError("No doctors found for this speciality.");
+          return;
+        }
+
+        const grouped = {};
+        data.forEach((d) => {
+          if (!grouped[d.doctor_id]) {
+            grouped[d.doctor_id] = {
+              id: d.doctor_id,
+              full_name: d.full_name,
+              gender: d.gender,
+              fees: d.fees,
+              slots: [],
+            };
+          }
+
+          grouped[d.doctor_id].slots.push({
+            id: d.slot_id,
+            time: new Date(d.slot_time).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            raw: d.slot_time,
+          });
+        });
+
+        setDoctorData(Object.values(grouped));
+      } catch (err) {
+        setError("Something went wrong.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctors();
+  }, [speciality]);
+
+  const handleBook = (doctorId, index) => {
+    const selectedSlot = document.querySelector(
+      `input[name="slot-${index}"]:checked`
+    );
+    const selectedDate = document.getElementById(
+      `appointment-date-${index}`
+    ).value;
+
+    if (!selectedSlot || !selectedDate) {
+      alert("Please select a slot and date.");
+      return;
+    }
+
+    const slotId = selectedSlot.value;
+    navigate(
+      `/confirm?doctor_id=${doctorId}&slot_id=${slotId}&date=${selectedDate}`
+    );
+  };
+
+  if (loading) return <h2>Loading...</h2>;
+  if (error) return <h2>{error}</h2>;
+
+  return (
     <main>
-        {doctorData.map((doc, i) => (
-            <DoctorCard key={i} doctor={doc} index={i} />
-        ))}
+      {doctorData.map((doc, i) => (
+        <DoctorCard key={doc.id} doctor={doc} index={i} handleBook={handleBook} />
+      ))}
     </main>
-);
+  );
+}
 
 export default DoctorList;

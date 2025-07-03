@@ -1,11 +1,15 @@
-// DoctorCard.jsx
 import React from "react";
 
-function DoctorCard({ doctor, index }) {
+function DoctorCard({ doctor, index, handleBook }) {
+  const today = new Date().toISOString().split("T")[0];
+
   return (
     <div className="card-container">
       <div className="side-profile">
-        <img src={doctor.image} alt={`Doctor ${doctor.id}`} />
+        <img
+          src={`/assets/doctor-${(index % 5) + 1}.jpg`}
+          alt={`Doctor ${doctor.full_name}`}
+        />
         <ul className="social-icons">
           <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
           <li><a href="#"><i className="fab fa-instagram"></i></a></li>
@@ -14,23 +18,37 @@ function DoctorCard({ doctor, index }) {
       </div>
 
       <div className="details">
-        <h2>{doctor.id}</h2>
-        <p className="specialization">Surgeon</p>
-        <p className="experience">20 years experience overall</p>
+        <h2>{doctor.full_name}</h2>
+        <p className="specialization">Speciality</p>
+        <p className="experience">Gender: {doctor.gender}</p>
 
         <div className="date-selection">
           <label htmlFor={`appointment-date-${index}`}>Select Date:</label>
-          <input type="date" id={`appointment-date-${index}`} name="appointment-date" />
+          <input
+            type="date"
+            id={`appointment-date-${index}`}
+            defaultValue={today}
+          />
         </div>
 
         <div className="slot-selection">
           <p>Appointment Slot:</p>
-          <label><input type="radio" name={`slot-${index}`} value="10:00 AM" /> 10:00 AM</label>
-          <label><input type="radio" name={`slot-${index}`} value="11:00 AM" /> 11:00 AM</label>
-          <label><input type="radio" name={`slot-${index}`} value="12:00 PM" /> 12:00 PM</label>
+          {doctor.slots.map((s, i) => (
+            <label key={s.id}>
+              <input
+                type="radio"
+                name={`slot-${index}`}
+                value={s.id}
+                defaultChecked={i === 0}
+              />
+              {s.time}
+            </label>
+          ))}
         </div>
 
-        <button className="book-btn button-primary">Book Appointment</button>
+        <button className="book-btn" onClick={() => handleBook(doctor.id, index)}>
+          Book Appointment
+        </button>
       </div>
     </div>
   );

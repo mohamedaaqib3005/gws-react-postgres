@@ -1,14 +1,25 @@
-import { useState } from "react";
+import React, { Suspense, lazy } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import DoctorList from "./pages/doctors-list";
 
-function Counter (){
-  const [count,setCount]=useState(0);
+// Dynamically import components
+const Home = lazy(() => import("./pages/Home"));
+const Specialities = lazy(() => import("./pages/Specialities"));
+const DoctorList = lazy(() => import("./pages/doctors-list"));
 
+
+function App() {
   return (
-   <div>
-    <p>current count:{count}</p>
-    <button onClick={()=>setCount(count+1)}>
-      + INcrease
-    </button>
-   </div>
+    <Router>
+      <Suspense fallback={<div>Loading page...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/specialities" element={<Specialities />} />
+         <Route path="/doctor-list" element={<DoctorList />} />
+        </Routes>
+      </Suspense>
+    </Router>
   );
 }
+
+export default App;

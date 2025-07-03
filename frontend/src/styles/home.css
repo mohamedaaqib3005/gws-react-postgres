@@ -1,0 +1,330 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+:root {
+  --primary-color: #047aed;
+  --primary-light: #369dff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #d7ebff;
+  font-family: "Lato", sans-serif;
+  line-height: 1.6;
+  color: #333;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+/* ✅ Header Layout Fix */
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1.25rem 3.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+
+nav ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav ul li button {
+  font-weight: 500;
+}
+
+
+main {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+section {
+  padding: 0 4rem;
+  width: 100%;
+  max-width: 1100px;
+  margin: auto 0;
+}
+
+section h1 {
+  font-size: 2rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: rgb(240, 240, 240);
+  margin: 0;
+  width: 100%;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1rem;
+  padding: 2em;
+  width: 100%;
+}
+
+.gender-options {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.button-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-primary:hover {
+  background-color: var(--primary-light);
+}
+
+dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 300px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#loginForm {
+  display: grid;
+  row-gap: 1rem;
+  padding: 1em 0;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.status-message {
+  font-weight: bold;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.status-success {
+  color: green;
+}
+
+.status-error {
+  color: red;
+}
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+:root {
+  --primary-color: #047aed;
+  --primary-light: #369dff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #d7ebff;
+  font-family: "Lato", sans-serif;
+  line-height: 1.6;
+  color: #333;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1.25rem 3.6rem;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+nav {
+  align-items: center;
+  margin-top: 0.5em;
+  padding-right: 0;
+}
+
+ul {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  list-style: none;
+  gap: 2rem;
+}
+
+li a {
+  color: white;
+  text-decoration: none;
+}
+
+main {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  margin: auto;
+}
+
+section {
+  padding: 0 4rem;
+  width: 100%;
+  max-width: 1100px;
+  margin: auto 0;
+
+}
+
+section h1 {
+  font-size: 2rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: white;
+  margin: 0;
+}
+
+#registerForm {
+  padding: 0 2rem;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1rem;
+  padding: 2em;
+}
+
+.gender-options {
+  display: inline;
+  gap: 0.5rem;
+
+}
+
+.button-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-primary:hover {
+  background-color: var(--primary-light);
+}
+
+dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 300px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#loginForm {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1rem;
+  padding: 2em;
+}
+
+#showDialog {
+  display: flex;
+  justify-content: center;
+}
+
+.status-message {
+  font-weight: bold;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.status-success {
+  color: green;
+}
+
+.status-error {
+  color: red;
+}
