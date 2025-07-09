@@ -1,14 +1,112 @@
-                                                                                                                                                                      // src/pages/Home.jsx
-import { useState,useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/home.css";
+import { useNavigate } from "react-router-dom";
+
 
 function Home() {
   const [showLogin, setShowLogin] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    import("../styles/home.css");
+    const registerForm = document.getElementById("registerForm");
+
+    const baseUrl = "http://localhost:5000/api";
+
+    const registerPatient = async (data) => {
+      try {
+        const response = await fetch(`${baseUrl}/patients`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Registration failed");
+        return result;
+      } catch (err) {
+        console.error("Registration error", err.message);
+        throw err;
+      }
+    };
+
+    const handleRegister = async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById("fullName").value;
+      const userName = document.getElementById("userName").value;
+      const dob = document.getElementById("dob").value;
+      const password = document.getElementById("registerPassword").value;
+      const genderInput = document.querySelector('input[name="gender"]:checked');
+      const gender = genderInput ? genderInput.value : "";
+
+      const status = document.getElementById("registrationStatus");
+
+      try {
+        await registerPatient({ fullName, userName, dob, password, gender });
+        status.innerText = "Registration successful!";
+        status.className = "status-message status-success";
+      } catch (error) {
+        status.innerText = `Registration failed: ${error.message}`;
+        status.className = "status-message status-error";
+      }
+    };
+
+    registerForm?.addEventListener("submit", handleRegister);
+
+    return () => {
+      registerForm?.removeEventListener("submit", handleRegister);
+    };
   }, []);
-  
+
+  useEffect(() => {
+    if (!showLogin) return;
+
+    const loginForm = document.getElementById("loginForm");
+    const loginStatus = document.getElementById("loginStatus");
+
+    const loginPatient = async (data) => {
+      try {
+        const response = await fetch("http://localhost:5000/api/sessions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.error || "Login failed");
+        return result;
+      } catch (err) {
+        console.error("Login error", err.message);
+        throw err;
+      }
+    };
+
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      const userName = document.getElementById("loginUsername").value;
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        await loginPatient({ userName, password });
+        document.cookie = `userName=${encodeURIComponent(userName)}; path=/`;
+
+        loginStatus.innerText = "Login successful!";
+        loginStatus.className = "status-message status-success";
+
+        setTimeout(() => {
+          navigate("/specialities");
+        }, 1000);
+      } catch (error) {
+        loginStatus.innerText = `Login failed: ${error.message}`;
+        loginStatus.className = "status-message status-error";
+      }
+    };
+
+    loginForm?.addEventListener("submit", handleLogin);
+
+    return () => {
+      loginForm?.removeEventListener("submit", handleLogin);
+    };
+  }, [showLogin]);
+
   return (
     <div>
       <header>
@@ -17,7 +115,14 @@ function Home() {
           <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
-            <li><button onClick={() => setShowLogin(true)} className="button-primary">Login</button></li>
+            <li>
+              <button
+                onClick={() => setShowLogin(true)}
+                className="button-primary"
+              >
+                Login
+              </button>
+            </li>
           </ul>
         </nav>
       </header>
@@ -39,40 +144,38 @@ function Home() {
           <div className="form-container">
             <form id="registerForm">
               <h2>Register now to avail a free appointment</h2>
-              <label htmlFor="fullName">
-                Fill in your full name
-                <input type="text" name="full-name" id="fullName" />
-              </label>
-              <label htmlFor="userName">
-                Username
-                <input type="text" name="username" id="userName" />
-              </label>
-              <label>
-                Gender
+              <label htmlFor="fullName">Full Name<input type="text" id="fullName" /></label>
+              <label htmlFor="userName">Username<input type="text" id="userName" /></label>
+              <label>Gender
                 <div className="gender-options">
-                  <input type="radio" name="gender" value="male" id="male" />
-                  <label htmlFor="male">Male</label>
-                  <input type="radio" name="gender" value="female" id="female" />
-                  <label htmlFor="female">Female</label>
-                  <input type="radio" name="gender" value="others" id="others" />
-                  <label htmlFor="others">Others</label>
+                  <input type="radio" name="gender" value="male" id="male" /><label htmlFor="male">Male</label>
+                  <input type="radio" name="gender" value="female" id="female" /><label htmlFor="female">Female</label>
+                  <input type="radio" name="gender" value="others" id="others" /><label htmlFor="others">Others</label>
                 </div>
               </label>
-              <label htmlFor="dob">
-                Enter your Date of Birth
-                <input type="date" name="dob" id="dob" />
-              </label>
-              <label htmlFor="registerPassword">
-                Enter Your Password
-                <input type="text" name="password" id="registerPassword" />
-              </label>
+              <label htmlFor="dob">DOB<input type="date" id="dob" /></label>
+              <label htmlFor="registerPassword">Password<input type="text" id="registerPassword" /></label>
               <button type="submit" className="button-primary">Submit</button>
             </form>
 
+            <button
+              onClick={() => setShowLogin(true)}
+              className="button-secondary"
+              style={{ marginTop: "1rem" }}
+            >
+              Already have an account? Login.
+            </button>
+
             {showLogin && (
               <dialog open id="loginModal">
-                <button onClick={() => setShowLogin(false)} className="close">&times;</button>
-                <form id="loginForm" method="dialog">
+                <button
+                  id="closeModal"
+                  className="close"
+                  onClick={() => setShowLogin(false)}
+                >
+                  &times;
+                </button>
+                <form id="loginForm">
                   <h2>Login</h2>
                   <label htmlFor="loginUsername">
                     Username
@@ -88,13 +191,9 @@ function Home() {
               </dialog>
             )}
 
-            <div>
-              <button id="loginLink" className="button-primary" onClick={() => setShowLogin(true)}>Login</button>
-            </div>
+            <div id="registrationStatus"></div>
           </div>
         </section>
-
-        <div id="registrationStatus"></div>
       </main>
 
       <footer></footer>
@@ -103,4 +202,3 @@ function Home() {
 }
 
 export default Home;
-

@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import "../styles/specialities.css";
+import "../styles/specialities.css";
 
-function Specialities() {
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find(row => row.startsWith(name + "="))
+    ?.split("=")[1] || null;
+}
+
+export default function Specialities() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("User");
 
@@ -11,42 +18,33 @@ function Specialities() {
       method: "DELETE",
       credentials: "include",
     }).then(() => {
+      document.cookie = "userName=; path=/; max-age=0";
       navigate("/");
     });
   };
 
   useEffect(() => {
-
-    import("../styles/specialities.css");
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/users/me", {
-          credentials: "include",
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setUserName(data.fullName);
-        } else {
-          navigate("/");
-        }
-      } catch (err) {
-        console.error("Error fetching user", err);
-        navigate("/");
-      }
-    };
-
-    // fetchUser();
+    const name = getCookie("userName");
+    if (name) {
+      setUserName(decodeURIComponent(name));
+    } else {
+      navigate("/");
+    }
   }, [navigate]);
+
+  const specialties = [
+    { name: "Cardiology", img: "cardiology.jpg" },
+    { name: "Neurology", img: "brain.jpeg" },
+    { name: "Eye Care", img: "eye.jpeg" },
+  ];
 
   return (
     <>
-      <header id="user-header" style={{ display: "grid" }}>
-        <Link to="/">
-          <h1 className="logo">GWS</h1>
-        </Link>
+      <header id="user-header">
+        <Link to="/" className="logo">GWS</Link>
         <nav>
           <ul>
-            <li><span id="user-greeting">Hello, {userName}</span></li>
+            <li>Hello, {userName}</li>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/appointments">Appointments</Link></li>
             <li><button onClick={logout}>Logout</button></li>
@@ -56,21 +54,16 @@ function Specialities() {
 
       <main>
         <h2>Consult top doctors for any health concern</h2>
-<section className={styles.specialitiesContainer}>
-          {[
-            { name: "Cardiology", img: "cardiology.jpg" },
-            { name: "Neurology", img: "brain.jpeg" },
-            { name: "Eye Care", img: "eye.jpeg" },
-            { name: "Pediatrics", img: "baby.jpeg" },
-            { name: "Fitness", img: "fitness.jpg" },
-            { name: "Hair and skin", img: "girl.jpg" },
-            { name: "Mental Health", img: "mental.jpeg" },
-          ].map((spec, i) => (
-            <figure key={i}>
-              <a href="#">
-                <img src={`/assets/${spec.img}`} alt={spec.name} />
-              </a>
-              <figcaption>{spec.name}</figcaption>
+        <section className="specialities-container">
+          {specialties.map((spec) => (
+            <figure key={spec.name}>
+              <Link to={`/doctor-list?speciality=${encodeURIComponent(spec.name.toLowerCase())}`}>
+                <img
+                  src={`/assets/${spec.img}`}
+                  alt={spec.name}
+                />
+                <figcaption>{spec.name}</figcaption>
+              </Link>
             </figure>
           ))}
         </section>
@@ -78,5 +71,3 @@ function Specialities() {
     </>
   );
 }
-
-export default Specialities;

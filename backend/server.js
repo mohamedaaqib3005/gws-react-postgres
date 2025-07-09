@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -16,8 +20,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://127.0.0.1:5500",
-    methods: "GET,POST,PUT,DELETE",
+    origin: ["http://127.0.0.1:5500", "http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
