@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/home.css";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/HomeHeader";
 
 
 function Home() {
@@ -109,23 +110,7 @@ function Home() {
 
   return (
     <div>
-      <header>
-        <h1 className="logo">GWS</h1>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li>
-              <button
-                onClick={() => setShowLogin(true)}
-                className="button-primary"
-              >
-                Login
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </header>
+   <Header></Header>
 
       <main>
         <section className="hero">

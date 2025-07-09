@@ -14,7 +14,7 @@ function DoctorList() {
 
   useEffect(() => {
 
-  
+
     if (!speciality) {
       setError("Speciality is missing from the URL.");
       setLoading(false);

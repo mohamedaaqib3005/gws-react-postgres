@@ -7,8 +7,8 @@ export default function Confirm() {
   const navigate = useNavigate();
 
   const doctorId = params.get("doctor_id");
-  const slotId   = params.get("slot_id");
-  const date     = params.get("date");
+  const slotId = params.get("slot_id");
+  const date = params.get("date");
 
   return (
     <div className="confirmation-container">
