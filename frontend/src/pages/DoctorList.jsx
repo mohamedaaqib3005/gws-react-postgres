@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import DoctorCard from "../components/DoctorCard";
+import DoctorCard from "../Components/DoctorCard";
 import "../styles/doctor-list.css";
 import { fetchDoctorsBySpeciality } from "../api/doctor-list";
 

@@ -71,13 +71,13 @@ h2 {
   font-weight: bold;
 }
 
-section {
+/* section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
   padding: 2rem;
-}
+} */
 
 figure {
   text-align: center;
@@ -85,6 +85,7 @@ figure {
 
 figure img:hover {
   transform: scale(1.05);
+
 }
 
 figure a {
@@ -98,6 +99,8 @@ figure img {
   object-fit: cover;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
+  animation: fadeIn 0.3s ease-in forwards;
+
 }
 
 figcaption {
@@ -117,7 +120,7 @@ figcaption {
   cursor: pointer;
 }
 
-#specialities-container {
+.specialities-container {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
@@ -125,25 +128,24 @@ figcaption {
   padding: 2rem;
 }
 
-#specialities-container figure {
+.specialities-container figure {
   text-align: center;
 }
 
-#specialities-container img {
+.specialities-container img {
   width: 250px;
   height: 250px;
-  border-radius: 50%; 
+  border-radius: 50%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-#specialities-container img:hover {
+.specialities-container img:hover {
   transform: scale(1.05);
 }
 
-#specialities-container figcaption {
+.specialities-container figcaption {
   margin-top: 0.5rem;
   font-weight: bold;
   text-transform: capitalize;
 }
-

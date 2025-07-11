@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "../styles/home.css";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/HomeHeader";
+import HomeHeader from "../Components/HomeHeader";
+import DatePicker from "../Components/DatePicker"; 
 
 
 function Home() {
   const [showLogin, setShowLogin] = useState(false);
+   const [dob, setDob] = useState(new Date()); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -110,7 +112,8 @@ function Home() {
 
   return (
     <div>
-   <Header></Header>
+   <HomeHeader setShowLogin={setShowLogin} />
+
 
       <main>
         <section className="hero">
@@ -138,7 +141,10 @@ function Home() {
                   <input type="radio" name="gender" value="others" id="others" /><label htmlFor="others">Others</label>
                 </div>
               </label>
-              <label htmlFor="dob">DOB<input type="date" id="dob" /></label>
+              <label>
+                DOB
+                <DatePicker selectedDate={dob} setSelectedDate={setDob} />
+              </label>
               <label htmlFor="registerPassword">Password<input type="text" id="registerPassword" /></label>
               <button type="submit" className="button-primary">Submit</button>
             </form>

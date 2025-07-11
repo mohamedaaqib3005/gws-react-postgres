@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/specialities.css";
 
+
+import cardiology from "../assets/cardiology.jpg";
+import brain from "../assets/brain.jpeg";
+import eye from "../assets/eye.jpeg";
+
 function getCookie(name) {
   return document.cookie
     .split("; ")
@@ -33,10 +38,11 @@ export default function Specialities() {
   }, [navigate]);
 
   const specialties = [
-    { name: "Cardiology", img: "cardiology.jpg" },
-    { name: "Neurology", img: "brain.jpeg" },
-    { name: "Eye Care", img: "eye.jpeg" },
+    { name: "Cardiology", img: cardiology },
+    { name: "Neurology", img: brain },
+    { name: "Eye Care", img: eye },
   ];
+
 
   return (
     <>
@@ -58,10 +64,8 @@ export default function Specialities() {
           {specialties.map((spec) => (
             <figure key={spec.name}>
               <Link to={`/doctor-list?speciality=${encodeURIComponent(spec.name.toLowerCase())}`}>
-                <img
-                  src={`/assets/${spec.img}`}
-                  alt={spec.name}
-                />
+                <img src={spec.img} alt={spec.name} />
+
                 <figcaption>{spec.name}</figcaption>
               </Link>
             </figure>

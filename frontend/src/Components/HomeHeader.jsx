@@ -1,8 +1,7 @@
 import React from "react";
  
-import "../styles/header.css";
 
-function Header (){
+function HomeHeader ({ setShowLogin }) {
 
     return (
        <header>
@@ -26,4 +25,4 @@ function Header (){
       
 
 }
-export default Header;
+export default HomeHeader;
