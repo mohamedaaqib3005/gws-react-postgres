@@ -30,6 +30,7 @@ function DoctorCard({ doctor, index, handleBook }) {
             defaultValue={today}
           />
         </div>
+        {/* date picker */}
 
         <div className="slot-selection">
           <p>Appointment Slot:</p>

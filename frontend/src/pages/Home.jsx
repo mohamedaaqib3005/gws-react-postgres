@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import "../styles/home.css";
 import { useNavigate } from "react-router-dom";
 import HomeHeader from "../Components/HomeHeader";
-import DatePicker from "../Components/DatePicker"; 
+import DatePicker from "../Components/DatePicker";
 
 
 function Home() {
   const [showLogin, setShowLogin] = useState(false);
-   const [dob, setDob] = useState(new Date()); 
+  const [dob, setDob] = useState(new Date());
   const navigate = useNavigate();
 
   useEffect(() => {
     const registerForm = document.getElementById("registerForm");
-
+    
     const baseUrl = "http://localhost:5000/api";
 
     const registerPatient = async (data) => {
@@ -36,9 +36,11 @@ function Home() {
       const fullName = document.getElementById("fullName").value;
       const userName = document.getElementById("userName").value;
       const dob = document.getElementById("dob").value;
+      // const dob = "01-01-2025"
       const password = document.getElementById("registerPassword").value;
       const genderInput = document.querySelector('input[name="gender"]:checked');
       const gender = genderInput ? genderInput.value : "";
+      // get values from event 
 
       const status = document.getElementById("registrationStatus");
 
@@ -49,6 +51,7 @@ function Home() {
       } catch (error) {
         status.innerText = `Registration failed: ${error.message}`;
         status.className = "status-message status-error";
+        // dom 
       }
     };
 
@@ -112,7 +115,7 @@ function Home() {
 
   return (
     <div>
-   <HomeHeader setShowLogin={setShowLogin} />
+      <HomeHeader setShowLogin={setShowLogin} />
 
 
       <main>

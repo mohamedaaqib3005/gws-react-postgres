@@ -7,35 +7,62 @@ import cardiology from "../assets/cardiology.jpg";
 import brain from "../assets/brain.jpeg";
 import eye from "../assets/eye.jpeg";
 
-function getCookie(name) {
-  return document.cookie
-    .split("; ")
-    .find(row => row.startsWith(name + "="))
-    ?.split("=")[1] || null;
-}
+// function getCookie(name) {
+//   return document.cookie
+//     .split("; ")
+//     .find(row => row.startsWith(name + "="))
+//     ?.split("=")[1] || null;
+// }
 
 export default function Specialities() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("User");
 
-  const logout = () => {
-    fetch("http://localhost:5000/api/sessions", {
-      method: "DELETE",
-      credentials: "include",
-    }).then(() => {
-      document.cookie = "userName=; path=/; max-age=0";
+  const logout = async () => {
+    try {
+      await fetch("http://localhost:5000/api/sessions", {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      // document.cookie = "userName=; path=/; max-age=0";
+
       navigate("/");
-    });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   useEffect(() => {
-    const name = getCookie("userName");
-    if (name) {
-      setUserName(decodeURIComponent(name));
-    } else {
-      navigate("/");
-    }
+    const checkSession = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/sessions", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (res.status === 200) {
+          const { user } = await res.json();
+          setUserName(user.userName);
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        navigate("/");
+      }
+    };
+    checkSession();
   }, [navigate]);
+
+  // useEffect(() => {
+  //   const name = getCookie("userName");
+  //   // 
+  //   if (name) {
+  //     setUserName(decodeURIComponent(name));
+  //   } else {
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
 
   const specialties = [
     { name: "Cardiology", img: cardiology },
@@ -47,6 +74,8 @@ export default function Specialities() {
   return (
     <>
       <header id="user-header">
+        {/* use header every where */}
+        {/* extract into component */}
         <Link to="/" className="logo">GWS</Link>
         <nav>
           <ul>

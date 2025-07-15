@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
 const Specialities = lazy(() => import("./pages/Specialities"));
 const DoctorList = lazy(() => import("./pages/DoctorList"));
@@ -13,7 +12,6 @@ function App() {
     <Router>
       <Suspense fallback={<div>Loading page...</div>}>
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/specialities" element={<Specialities />} />
           <Route path="/doctor-list" element={<DoctorList />} />
