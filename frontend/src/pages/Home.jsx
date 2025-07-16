@@ -3,115 +3,62 @@ import "../styles/home.css";
 import { useNavigate } from "react-router-dom";
 import HomeHeader from "../Components/HomeHeader";
 import DatePicker from "../Components/DatePicker";
+import { registerPatient, loginPatient } from "../api/request";
+
+
 
 
 function Home() {
-  const [showLogin, setShowLogin] = useState(false);
+
+  //Registration
+  const [fullName, setFullName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
   const [dob, setDob] = useState(new Date());
+  const [registrationStatus, setRegistrationStatus] = useState("");
+
+
+  //Login
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginStatus, setLoginStatus] = useState("");
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const registerForm = document.getElementById("registerForm");
-    
-    const baseUrl = "http://localhost:5000/api";
 
-    const registerPatient = async (data) => {
-      try {
-        const response = await fetch(`${baseUrl}/patients`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || "Registration failed");
-        return result;
-      } catch (err) {
-        console.error("Registration error", err.message);
-        throw err;
-      }
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      fullName,
+      userName,
+      password,
+      dob,
+      gender,
     };
 
-    const handleRegister = async (e) => {
-      e.preventDefault();
-      const fullName = document.getElementById("fullName").value;
-      const userName = document.getElementById("userName").value;
-      const dob = document.getElementById("dob").value;
-      // const dob = "01-01-2025"
-      const password = document.getElementById("registerPassword").value;
-      const genderInput = document.querySelector('input[name="gender"]:checked');
-      const gender = genderInput ? genderInput.value : "";
-      // get values from event 
+    try {
+      await registerPatient(data);
+      setRegistrationStatus("Registration successful!");
+    } catch (err) {
+      setRegistrationStatus("Registration failed: " + err.message);
+    }
+  };
 
-      const status = document.getElementById("registrationStatus");
-
-      try {
-        await registerPatient({ fullName, userName, dob, password, gender });
-        status.innerText = "Registration successful!";
-        status.className = "status-message status-success";
-      } catch (error) {
-        status.innerText = `Registration failed: ${error.message}`;
-        status.className = "status-message status-error";
-        // dom 
-      }
-    };
-
-    registerForm?.addEventListener("submit", handleRegister);
-
-    return () => {
-      registerForm?.removeEventListener("submit", handleRegister);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!showLogin) return;
-
-    const loginForm = document.getElementById("loginForm");
-    const loginStatus = document.getElementById("loginStatus");
-
-    const loginPatient = async (data) => {
-      try {
-        const response = await fetch("http://localhost:5000/api/sessions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(data),
-        });
-        const result = await response.json();
-        if (!response.ok) throw new Error(result?.error || "Login failed");
-        return result;
-      } catch (err) {
-        console.error("Login error", err.message);
-        throw err;
-      }
-    };
-
-    const handleLogin = async (e) => {
-      e.preventDefault();
-      const userName = document.getElementById("loginUsername").value;
-      const password = document.getElementById("loginPassword").value;
-
-      try {
-        await loginPatient({ userName, password });
-        document.cookie = `userName=${encodeURIComponent(userName)}; path=/`;
-
-        loginStatus.innerText = "Login successful!";
-        loginStatus.className = "status-message status-success";
-
-        setTimeout(() => {
-          navigate("/specialities");
-        }, 1000);
-      } catch (error) {
-        loginStatus.innerText = `Login failed: ${error.message}`;
-        loginStatus.className = "status-message status-error";
-      }
-    };
-
-    loginForm?.addEventListener("submit", handleLogin);
-
-    return () => {
-      loginForm?.removeEventListener("submit", handleLogin);
-    };
-  }, [showLogin]);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await loginPatient({ userName: loginUsername, password: loginPassword });
+      setLoginStatus("Login successful!");
+      setTimeout(() => {
+        navigate("/specialities");
+      }, 1000);
+    } catch (err) {
+      setLoginStatus("Login failed: " + err.message);
+    }
+  };
 
   return (
     <div>
@@ -133,24 +80,82 @@ function Home() {
 
         <section>
           <div className="form-container">
-            <form id="registerForm">
+            <form onSubmit={handleRegisterSubmit}>
               <h2>Register now to avail a free appointment</h2>
-              <label htmlFor="fullName">Full Name<input type="text" id="fullName" /></label>
-              <label htmlFor="userName">Username<input type="text" id="userName" /></label>
-              <label>Gender
+              <label htmlFor="fullName">
+                Full Name
+                <input
+                  type="text"
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </label>
+
+              <label htmlFor="userName">
+                Username
+                <input
+                  type="text"
+                  id="userName"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
+              </label>
+
+              <label>
+                Gender
                 <div className="gender-options">
-                  <input type="radio" name="gender" value="male" id="male" /><label htmlFor="male">Male</label>
-                  <input type="radio" name="gender" value="female" id="female" /><label htmlFor="female">Female</label>
-                  <input type="radio" name="gender" value="others" id="others" /><label htmlFor="others">Others</label>
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="male"
+                    id="male"
+                    checked={gender === "male"}
+                    onChange={(e) => setGender(e.target.value)}
+                  />
+                  <label htmlFor="male">Male</label>
+
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="female"
+                    id="female"
+                    checked={gender === "female"}
+                    onChange={(e) => setGender(e.target.value)}
+                  />
+                  <label htmlFor="female">Female</label>
+
+                  <input
+                    type="radio"
+                    name="gender"
+                    value="others"
+                    id="others"
+                    checked={gender === "others"}
+                    onChange={(e) => setGender(e.target.value)}
+                  />
+                  <label htmlFor="others">Others</label>
                 </div>
               </label>
+
               <label>
                 DOB
                 <DatePicker selectedDate={dob} setSelectedDate={setDob} />
               </label>
-              <label htmlFor="registerPassword">Password<input type="text" id="registerPassword" /></label>
+
+              <label htmlFor="registerPassword">
+                Password
+                <input
+                  type="password"
+                  id="registerPassword"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </label>
               <button type="submit" className="button-primary">Submit</button>
             </form>
+            <div style={{ color: registrationStatus.includes("failed") ? "red" : "green" }}>
+              {registrationStatus}
+            </div>
 
             <button
               onClick={() => setShowLogin(true)}
@@ -169,28 +174,45 @@ function Home() {
                 >
                   &times;
                 </button>
-                <form id="loginForm">
+                <form onSubmit={handleLogin}>
                   <h2>Login</h2>
                   <label htmlFor="loginUsername">
                     Username
-                    <input type="text" id="loginUsername" name="userName" required />
+                    <input
+                      type="text"
+                      id="loginUsername"
+                      value={loginUsername}
+                      onChange={(e) => setLoginUsername(e.target.value)}
+                      required
+                    />
                   </label>
+
                   <label htmlFor="loginPassword">
                     Password
-                    <input type="password" id="loginPassword" name="password" required />
+                    <input
+                      type="password"
+                      id="loginPassword"
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      required
+                    />
                   </label>
                   <button type="submit">Login</button>
                 </form>
-                <div id="loginStatus"></div>
+
+                <div style={{ color: loginStatus.includes("failed") ? "red" : "green" }}>
+                  {loginStatus}
+                </div>
+
+                {/* <div id="loginStatus"></div> */}
               </dialog>
             )}
 
-            <div id="registrationStatus"></div>
+            {/* <div id="registrationStatus"></div> */}
           </div>
         </section>
       </main>
 
-      <footer></footer>
     </div>
   );
 }

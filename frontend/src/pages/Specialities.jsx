@@ -13,6 +13,11 @@ import eye from "../assets/eye.jpeg";
 //     .find(row => row.startsWith(name + "="))
 //     ?.split("=")[1] || null;
 // }
+const specialties = [
+  { name: "Cardiology", img: cardiology },
+  { name: "Neurology", img: brain },
+  { name: "Eye Care", img: eye },
+];
 
 export default function Specialities() {
   const navigate = useNavigate();
@@ -64,11 +69,6 @@ export default function Specialities() {
   //   }
   // }, [navigate]);
 
-  const specialties = [
-    { name: "Cardiology", img: cardiology },
-    { name: "Neurology", img: brain },
-    { name: "Eye Care", img: eye },
-  ];
 
 
   return (
