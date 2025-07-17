@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/specialities.css";
+import Header from "../Components/Header";
 
 
 import cardiology from "../assets/cardiology.jpg";
 import brain from "../assets/brain.jpeg";
 import eye from "../assets/eye.jpeg";
+import useSession from "../hooks/useSession";
+
 
 // function getCookie(name) {
 //   return document.cookie
@@ -21,43 +24,9 @@ const specialties = [
 
 export default function Specialities() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("User");
 
-  const logout = async () => {
-    try {
-      await fetch("http://localhost:5000/api/sessions", {
-        method: "DELETE",
-        credentials: "include",
-      });
 
-      // document.cookie = "userName=; path=/; max-age=0";
-
-      navigate("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/sessions", {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (res.status === 200) {
-          const { user } = await res.json();
-          setUserName(user.userName);
-        } else {
-          navigate("/");
-        }
-      } catch (error) {
-        navigate("/");
-      }
-    };
-    checkSession();
-  }, [navigate]);
+  const { userName } = useSession();
 
   // useEffect(() => {
   //   const name = getCookie("userName");
@@ -73,19 +42,7 @@ export default function Specialities() {
 
   return (
     <>
-      <header id="user-header">
-        {/* use header every where */}
-        {/* extract into component */}
-        <Link to="/" className="logo">GWS</Link>
-        <nav>
-          <ul>
-            <li>Hello, {userName}</li>
-            <li><Link to="/dashboard">Dashboard</Link></li>
-            <li><Link to="/appointments">Appointments</Link></li>
-            <li><button onClick={logout}>Logout</button></li>
-          </ul>
-        </nav>
-      </header>
+      <Header userName={userName} />
 
       <main>
         <h2>Consult top doctors for any health concern</h2>

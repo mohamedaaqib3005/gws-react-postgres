@@ -1,38 +1,56 @@
-import { baseUrl } from "../constants/constants"; 
+import { baseUrl } from "../constants/constants";
 
 export async function registerPatient(data) {
-    try {
-        const response = await fetch(`${baseUrl}/patients`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
+  try {
+    const response = await fetch(`${baseUrl}/patients`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || "Registration failed");
-        return result;
-    } catch (err) {
-        console.error("Registration error", err.message);
-        throw err;
-    }
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Registration failed");
+    return result;
+  } catch (err) {
+    console.error("Registration error", err.message);
+    throw err;
+  }
 }
 
 export async function loginPatient(data) {
 
-    try {
-        const response = await fetch(`http://localhost:5000/api/sessions`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(data),
-        });
+  try {
+    const response = await fetch(`http://localhost:5000/api/sessions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
 
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || "Login failed");
-        return result;
-    } catch (err) {
-        console.error("Login error", err.message);
-        throw err;
-    }
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Login failed");
+    return result;
+  } catch (err) {
+    console.error("Login error", err.message);
+    throw err;
+  }
 }
+
+export async function fetchSession() {
+  try {
+    const res = await fetch("http://localhost:5000/api/sessions", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (res.status === 200) {
+      const { user } = await res.json();
+      return { success: true, user };
+    } else {
+      return { success: false };
+    }
+  } catch (error) {
+    return { success: false };
+  }
+};
 

@@ -18,7 +18,6 @@ function Home() {
   const [dob, setDob] = useState(new Date());
   const [registrationStatus, setRegistrationStatus] = useState("");
 
-
   //Login
   const [showLogin, setShowLogin] = useState(false);
   const [loginUsername, setLoginUsername] = useState("");
