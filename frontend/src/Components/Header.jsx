@@ -15,9 +15,9 @@ export async function logout() {
 };
 
 
-function Header() {
+function Header({ userName }) {
   const navigate = useNavigate();
-  const userName = localStorage.getItem("userName");
+  // const userName = localStorage.getItem("userName");
 
   return (
 

@@ -5,7 +5,7 @@ export async function fetchDoctorsBySpeciality(speciality, startTime, endTime) {
     const res = await fetch(
       `${API_BASE}/doctors/specialities/${speciality}?startTime=${startTime}&endTime=${endTime}`
     );
-
+    
     if (!res.ok) {
       throw new Error("Failed to fetch doctors");
     }

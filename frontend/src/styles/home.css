@@ -87,7 +87,9 @@ section h1 {
   border-radius: 10px;
   background-color: rgb(240, 240, 240);
   margin: 0;
-  width: 100%;
+  width: 100%; 
+  max-width: 800px;
+
 }
 
 form {
@@ -100,8 +102,14 @@ form {
 
 .gender-options {
   display: flex;
-  gap: 1rem;
+  flex-flow: row;
+  /* gap: 2rem; */
+  padding: 10px;
   margin-top: 0.5rem;
+}
+
+.gender-options label{
+ padding-left: 6px;
 }
 
 .button-primary {

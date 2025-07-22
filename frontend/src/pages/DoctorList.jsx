@@ -25,6 +25,7 @@ function DoctorList() {
       const startTime = new Date("2024-01-01").toISOString();
       const endTime = new Date("2026-01-01").toISOString();
 
+
       try {
         const data = await fetchDoctorsBySpeciality(
           speciality,
@@ -39,6 +40,9 @@ function DoctorList() {
 
         const grouped = {};
         data.forEach((d) => {
+          const slotDate = new Date(d.slot_time);
+          const formattedDate = slotDate.toISOString().split("T")[0];
+
           if (!grouped[d.doctor_id]) {
             grouped[d.doctor_id] = {
               id: d.doctor_id,
@@ -47,18 +51,32 @@ function DoctorList() {
               gender: d.gender,
               fees: d.fees,
               slots: [],
+              availableDates: new Set(),
+
             };
           }
+          grouped[d.doctor_id].availableDates.add(formattedDate);
+
 
           grouped[d.doctor_id].slots.push({
             id: d.slot_id,
-            time: new Date(d.slot_time).toLocaleTimeString([], {
+            time: slotDate.toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             }),
             raw: d.slot_time,
+            date: formattedDate,
+
           });
         });
+
+        Object.values(grouped).forEach(doc => {
+          doc.availableDates = Array.from(doc.availableDates);
+        });
+
+        console.log(Object.values(grouped));
+
+
 
         setDoctorData(Object.values(grouped));
       } catch (err) {
@@ -71,24 +89,17 @@ function DoctorList() {
     fetchDoctors();
   }, [speciality]);
 
-  const handleBook = (doctorId, index) => {
-    const selectedSlot = document.querySelector(
-      `input[name="slot-${index}"]:checked`
-    );
-    const selectedDate = document.getElementById(
-      `appointment-date-${index}`
-    ).value;
-
-    if (!selectedSlot || !selectedDate) {
+  const handleBook = (doctorId, slotId, date) => {
+    if (!slotId || !date) {
       alert("Please select a slot and date.");
       return;
     }
 
-    const slotId = selectedSlot.value;
     navigate(
-      `/confirm?doctor_id=${doctorId}&slot_id=${slotId}&date=${selectedDate}`
+      `/confirm?doctor_id=${doctorId}&slot_id=${slotId}&date=${date}`
     );
   };
+
 
   if (loading) return <h2>Loading...</h2>;
   if (error) return <h2>{error}</h2>;

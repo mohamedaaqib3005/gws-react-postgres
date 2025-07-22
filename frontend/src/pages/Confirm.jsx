@@ -10,6 +10,38 @@ export default function Confirm() {
   const slotId = params.get("slot_id");
   const date = params.get("date");
 
+  const handleConfirmAppointment = async () => {
+    console.log({ doctorId, slotId, date });
+
+    try {
+      const response = await fetch("http://localhost:5000/api/appointments/me", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          slot: slotId,
+          doctorId,
+          date
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Appointment confirmed!");
+        navigate("/appointments");
+      } else {
+        console.error("Error: ", data);
+        alert(data.error || "Failed to confirm appointment");
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      alert("Something went wrong!");
+    }
+  };
+
   return (
     <div className="confirmation-container">
       <div className="header">
@@ -44,7 +76,7 @@ export default function Confirm() {
           <button onClick={() => alert("Reschedule flow…")}>
             Reschedule
           </button>
-          <button onClick={() => alert("Payment flow…")}>
+          <button onClick={handleConfirmAppointment}>
             Make Payment
           </button>
         </div>

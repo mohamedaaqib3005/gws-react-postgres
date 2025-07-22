@@ -1,55 +1,68 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import DoctorCalendar from "./DoctorCalendar.jsx";
+import doctorImage from "../assets/doctor-2.jpg"; 
+
 
 function DoctorCard({ doctor, index, handleBook }) {
-  const today = new Date().toISOString().split("T")[0];
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [filteredSlots, setFilteredSlots] = useState([]);
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    const selectedDateStr = formatDate(selectedDate);
+    const matchingSlots = doctor.slots.filter(
+      (slot) => slot.date === selectedDateStr
+    );
+    setFilteredSlots(matchingSlots);
+  }, [selectedDate, doctor.slots]);
+
+  const selectedDateStr = formatDate(selectedDate);
+
+  console.log("Selected Date:", selectedDateStr);
+  console.log("Filtered Slots:", filteredSlots);
 
   return (
-    <div className="card-container">
+    <div className="doctor-card">
       <div className="side-profile">
-        <img
-          src={`/assets/doctor-${(index % 5) + 1}.jpg`}
-          alt={`Doctor ${doctor.full_name}`}
-        />
-        <ul className="social-icons">
-          <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
-          <li><a href="#"><i className="fab fa-instagram"></i></a></li>
-          <li><a href="#"><i className="fab fa-twitter"></i></a></li>
-        </ul>
+<img src={doctorImage} alt="Doctor 2" />
+
+        <h2>{doctor.full_name}</h2>
       </div>
 
-      <div className="details">
-        <h2>{doctor.full_name}</h2>
-        <p className="specialization">Speciality</p>
-        <p className="experience">Gender: {doctor.gender}</p>
+      <div className="calendar-section">
+        <h3>Select a Date</h3>
+        <DoctorCalendar
+          availableDates={doctor.availableDates}
+          selectedDate={selectedDate}
+          onChange={setSelectedDate}
+        />
+      </div>
 
-        <div className="date-selection">
-          <label htmlFor={`appointment-date-${index}`}>Select Date:</label>
-          <input
-            type="date"
-            id={`appointment-date-${index}`}
-            defaultValue={today}
-          />
+      <div className="slots-section">
+        <h3>Available Slots</h3>
+        <div className="slots-placeholder">
+          {filteredSlots.length > 0 ? (
+            filteredSlots.map((slot) => (
+              <button
+                key={slot.id}
+                className="slot-btn"
+                onClick={() =>
+                  handleBook(doctor.id, slot.id, selectedDateStr)
+                }
+              >
+                {slot.time}
+              </button>
+            ))
+          ) : (
+            <p>No slots available on selected date</p>
+          )}
         </div>
-        {/* date picker */}
-
-        <div className="slot-selection">
-          <p>Appointment Slot:</p>
-          {doctor.slots.map((s, i) => (
-            <label key={s.id}>
-              <input
-                type="radio"
-                name={`slot-${index}`}
-                value={s.id}
-                defaultChecked={i === 0}
-              />
-              {s.time}
-            </label>
-          ))}
-        </div>
-
-        <button className="book-btn" onClick={() => handleBook(doctor.id, index)}>
-          Book Appointment
-        </button>
       </div>
     </div>
   );

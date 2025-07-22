@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import HomeHeader from "../Components/HomeHeader";
 import DatePicker from "../Components/DatePicker";
 import { registerPatient, loginPatient } from "../api/request";
-
+import InputField from "../Components/InputField";
+import GenderField from "../Components/GenderField";
 
 
 
@@ -81,75 +82,42 @@ function Home() {
           <div className="form-container">
             <form onSubmit={handleRegisterSubmit}>
               <h2>Register now to avail a free appointment</h2>
-              <label htmlFor="fullName">
-                Full Name
-                <input
-                  type="text"
-                  id="fullName"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </label>
+              <InputField
+                id="fullName"
+                label="Enter your full name"
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
 
-              <label htmlFor="userName">
-                Username
-                <input
-                  type="text"
-                  id="userName"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                />
-              </label>
 
-              <label>
-                Gender
-                <div className="gender-options">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    id="male"
-                    checked={gender === "male"}
-                    onChange={(e) => setGender(e.target.value)}
-                  />
-                  <label htmlFor="male">Male</label>
+              <InputField
+                id="userName"
+                label="Username"
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
 
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    id="female"
-                    checked={gender === "female"}
-                    onChange={(e) => setGender(e.target.value)}
-                  />
-                  <label htmlFor="female">Female</label>
+              <GenderField />
+              <InputField
+                id="dob"
+                label="Date of Birth"
+                type="date"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
 
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="others"
-                    id="others"
-                    checked={gender === "others"}
-                    onChange={(e) => setGender(e.target.value)}
-                  />
-                  <label htmlFor="others">Others</label>
-                </div>
-              </label>
 
-              <label>
-                DOB
-                <DatePicker selectedDate={dob} setSelectedDate={setDob} />
-              </label>
+              <InputField
+                id="registerPassword"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
 
-              <label htmlFor="registerPassword">
-                Password
-                <input
-                  type="password"
-                  id="registerPassword"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
               <button type="submit" className="button-primary">Submit</button>
             </form>
             <div style={{ color: registrationStatus.includes("failed") ? "red" : "green" }}>
@@ -175,27 +143,24 @@ function Home() {
                 </button>
                 <form onSubmit={handleLogin}>
                   <h2>Login</h2>
-                  <label htmlFor="loginUsername">
-                    Username
-                    <input
-                      type="text"
-                      id="loginUsername"
-                      value={loginUsername}
-                      onChange={(e) => setLoginUsername(e.target.value)}
-                      required
-                    />
-                  </label>
+                  <InputField
+                    id="loginUsername"
+                    label="Username"
+                    type="text"
+                    value={loginUsername}
+                    onChange={(e) => setLoginUsername(e.target.value)}
+                    required
+                  />
 
-                  <label htmlFor="loginPassword">
-                    Password
-                    <input
-                      type="password"
-                      id="loginPassword"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      required
-                    />
-                  </label>
+                  <InputField
+                    id="loginPassword"
+                    label="Password"
+                    type="password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    required
+                  />
+
                   <button type="submit">Login</button>
                 </form>
 
